@@ -5,7 +5,7 @@
 An easy way to save data, settings or anything else as JSON file in an application folder,
 using a simple localStorage-like API.
 
-Primarily created to work with [Electron](https://github.com/atom/electron),
+Primary developed to work with [Electron](https://github.com/atom/electron),
 but also works in any node application.
 
 ## Table of Contents
@@ -25,16 +25,30 @@ it, too?
 
 ## Usage
 
+With Electron:
 ```JavaScript
+var app = require('electron').app;
 var ElectronData = require('electron-data');
 
 var settings = new ElectronData({
-  appName: 'your-app-name',
+  path: app.getPath('userData'),
   filename: 'settings'
 });
 ```
 
-The file will be automatically created in your home directory like that: ```/.your-app-name/settings.json```. And with ```settings``` you can do some magic. How? I will tell you now.
+Without Electron:
+```JavaScript
+var ElectronData = require('electron-data');
+
+var settings = new ElectronData({
+  dirname: 'fancy-dir-name',
+  filename: 'settings'
+});
+```
+
+When using ```electron-data``` without [Electron](https://github.com/atom/electron), the file will be automatically created in your home directory like that: ```/.fancy-dir-name/settings.json```.
+
+Now you can do some magic with the ```settings``` variable. How? I will tell you now.
 
 ## API
 
@@ -43,9 +57,9 @@ The file will be automatically created in your home directory like that: ```/.yo
 ##### ```new ElectronData(options)```
 Returns a new ElectronData instance.
 - ```options``` Object (optional)
-    - ```appName``` String - Name of the application. Will be used for directory name. Default is ```electron-app```
-    - ```filename``` String - Name for the file that will be stored and used. Default is ```settings```
-    - ```path``` String - Absolute path to your application directory. Will be created if not exists already. Default is ```home-dir-of-os/.electron-app/```
+    - ```dirname``` String - Only needed if you will use ```electron-data``` without [Electron](https://github.com/atom/electron). Default is ```electron-app```
+    - ```filename``` String - Name for the file that will be stored and used. Default is ```data```
+    - ```path``` String - **When using [Electron](https://github.com/atom/electron), use ```app.getPath('userData')``` as value.** Absolute path to your application directory. Will be created if not already exists. Default is ```home-dir-of-os/.electron-app/```
 
 
 ##### ```ElectronData.getOptions()```
