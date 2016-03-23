@@ -5,7 +5,7 @@
 An easy way to save data, settings or anything else as JSON file in an application folder,
 using a simple localStorage-like API.
 
-Primarily created to work with [Electron](#https://github.com/atom/electron),
+Primarily created to work with [Electron](https://github.com/atom/electron),
 but also works in any node application.
 
 ## Table of Contents
