@@ -1,38 +1,47 @@
 (function() {
   'use strict';
 
-  const home = require('user-home');
-  const mkdirp = require('mkdirp');
-  const fs = require('fs');
-
-  // Global vars
-  let options = {
-    appName: 'electron-app',
-    filename: 'data'
-  };
-
-  options.path = home +'/.'+ options.appName;
-
-  let filepath;
+  const home    = require('user-home');
+  const mkdirp  = require('mkdirp');
+  const fs      = require('fs');
 
 
   /**
+  * ElectronData()
+  * Creates an instance of this class. Also creates a file named like dirname
+  * in the given path. If using with Atom´s Electron, set path as the return of
+  * "app.getPath('userData')", the builtin function of Electron.
   *
+  * @param {Object} options
+  *   - {String} dirname - Only needed if you will use this moduel without
+  *       Electron. Default is "electron-app"
+  *   - {String} filename - Name for the file that will be stored and used.
+  *       Default is "data"
+  *   - {String} path - **When using Electron, use "app.getPath('userData')" as
+  *       value. Absolute path to your application directory. Will be created
+  *       if not already exists. Default is "home-dir-of-os/.electron-app/"
   */
   class ElectronData {
 
     constructor(changedOptions) {
       let self = this;
+
       self.data = {};
+      self.options = {
+        dirname: 'electron-app',
+        filename: 'data'
+      };
+
+      self.options.path = home +'/.'+ options.dirname;
 
       self._setOptions(changedOptions);
 
-      filepath = options.path +'/'+ options.filename +'.json';
+      self.filepath = self.options.path +'/'+ self.options.filename +'.json';
 
       try {
-        fs.accessSync(options.path, fs.F_OK);
+        fs.accessSync(self.options.path, fs.F_OK);
       } catch(e) {
-        mkdirp(options.path);
+        mkdirp(self.options.path);
       }
 
       try {
@@ -53,24 +62,28 @@
     * @return {Object} options
     */
     getOptions() {
-      return options;
+      return this.options;
     }
 
 
     /**
     * _setOptions()
-    *
+    * Private function to set the options given by constructor
     *
     */
     _setOptions(changedOptions) {
       for (let p in changedOptions) {
-        options[p] = changedOptions[p];
+        this.options[p] = changedOptions[p];
       }
     }
 
 
     /**
+    * has()
+    * Checks if given key is a property in actual data. Returns true or false.
     *
+    * @param {String} key - String to check if is property in data
+    * @return {Boolean}
     */
     has(key) {
       return this.data.hasOwnProperty(key);
@@ -99,7 +112,7 @@
     /**
     * set()
     * Sets the given value and given key in data, and return all data. If no
-    * key or value is given, return false;
+    * key or value is given, return false.
     *
     * @param {string} key
     * @param {?} value
@@ -114,7 +127,11 @@
 
 
     /**
+    * unset()
+    * Unsets a property-value pair by a given key. Returns boolean.
     *
+    * @param {String} key - deleteable property name
+    * @return {Boolean}
     */
     unset(key) {
       if (!key) return false;
@@ -124,7 +141,10 @@
 
 
     /**
+    * clear()
+    * Clears all data. Be careful: Deleted data can´t be restored.
     *
+    * @return {Object} data - the emptied data set
     */
     clear() {
       this.data = {};
@@ -133,10 +153,17 @@
 
 
     /**
+    * save()
+    * Saves the actual data to the file selected in constructor.
     *
+    * @return {Boolean}
     */
     save() {
-      fs.writeFile(filepath, JSON.stringify(this.data), {encoding: 'utf-8', flag: 'w+'}, (err) => {
+      fs.writeFile(this.filepath,
+          JSON.stringify(this.data),
+          {encoding: 'utf-8', flag: 'w+'},
+          (err) => {
+
         if (err) throw err;
         return true;
       });
