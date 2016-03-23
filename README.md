@@ -12,6 +12,7 @@ but also works in any node application.
 - [Installation](#installation)
 - [Usage](#usage)
 -	[API](#api)
+- [Development](#development)
 -	[Release Notes](#release-notes)
 
 ## Installation
@@ -95,6 +96,13 @@ Clears all data. Be careful, the data can´t be restored.
 Saves the data to the specified file.
 
 
+# Development
+
+Run test:
+```
+npm test
+```
+
 
 ## Release Notes
-No releases yet
+- ```1.0``` - Initial release

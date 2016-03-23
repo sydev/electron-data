@@ -1,3 +1,10 @@
+/**
+* module name:  electron-data
+* author:       Dominik Winter
+* version:      1.0
+* release date: 23.03.2016
+*/
+
 (function() {
   'use strict';
 
