@@ -1,10 +1,10 @@
 {
   "name": "electron-data",
-  "version": "0.1",
-  "description": "An easy way to save data, settings or anything else as json file in an application folder. Works like a charm with electron.",
+  "version": "0.1.0",
+  "description": "An easy way to save data, settings or anything else as json file in an application folder.",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "./node_modules/.bin/mocha --reporter spec"
   },
   "author": "",
   "license": "ISC",
@@ -14,5 +14,10 @@
   "dependencies": {
     "mkdirp": "^0.5.1",
     "user-home": "^2.0.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.4.5",
+    "path": "^0.12.7"
   }
 }
