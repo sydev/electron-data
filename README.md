@@ -1,7 +1,5 @@
 # electron-data
 
-**UNDER DEVELOPMENT** - Please do not use in production.
-
 An easy way to save data, settings or anything else as JSON file in an application folder,
 using a simple localStorage-like API.
 
