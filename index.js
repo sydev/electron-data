@@ -13,7 +13,6 @@
 
   options.path = home +'/.'+ options.appName;
 
-  let data = {};
   let filepath;
 
 
@@ -24,8 +23,9 @@
 
     constructor(changedOptions) {
       let self = this;
+      self.data = {};
 
-      this.setOptions(changedOptions);
+      self._setOptions(changedOptions);
 
       filepath = options.path +'/'+ options.filename +'.json';
 
@@ -37,15 +37,10 @@
 
       try {
         fs.accessSync(filepath, fs.F_OK);
-        data = require(filepath);
+        slef.data = require(filepath);
       } catch(e) {
-        fs.writeFileSync(filepath, '{}');
+        fs.writeFileSync(filepath, JSON.stringify(self.data));
       }
-
-      // Watch the data and updates the json file on change
-      Object.observe(data, (changes) => {
-        self.update();
-      });
 
       return this;
     }
@@ -63,21 +58,22 @@
 
 
     /**
+    * _setOptions()
+    *
     *
     */
-    setOptions(changedOptions) {
+    _setOptions(changedOptions) {
       for (let p in changedOptions) {
-        if (p == 'appName') options.appName = changedOptions.appName;
-        if (p == 'filename') options.filename = changedOptions.filename;
-        if (p == 'path') options.path = changedOptions.path;
+        options[p] = changedOptions[p];
       }
     }
+
 
     /**
     *
     */
     has(key) {
-      return data.hasOwnProperty(key);
+      return this.data.hasOwnProperty(key);
     }
 
 
@@ -90,11 +86,11 @@
     * @return {?} property value / data
     */
     get(key) {
-      if (!key) return data;
+      if (!key) return this.data;
 
-      for (let p in data) {
+      for (let p in this.data) {
         if (p == key) {
-          return data[p];
+          return this.data[p];
         }
       }
     }
@@ -112,8 +108,8 @@
     set(key, value) {
       if (!key || !value) return false;
 
-      data[key] = value;
-      return data;
+      this.data[key] = value;
+      return this.data;
     }
 
 
@@ -123,8 +119,7 @@
     unset(key) {
       if (!key) return false;
 
-      delete data[key];
-      return data;
+      return delete this.data[key];
     }
 
 
@@ -132,17 +127,18 @@
     *
     */
     clear() {
-      data = {};
-      return data;
+      this.data = {};
+      return this.data;
     }
 
 
     /**
     *
     */
-    update() {
-      fs.writeFile(filepath, JSON.stringify(data), (err) => {
+    save() {
+      fs.writeFile(filepath, JSON.stringify(this.data), {encoding: 'utf-8', flag: 'w+'}, (err) => {
         if (err) throw err;
+        return true;
       });
     }
 
