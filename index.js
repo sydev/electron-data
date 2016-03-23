@@ -32,7 +32,7 @@
         filename: 'data'
       };
 
-      self.options.path = home +'/.'+ options.dirname;
+      self.options.path = home +'/.'+ self.options.dirname;
 
       self._setOptions(changedOptions);
 
@@ -45,10 +45,10 @@
       }
 
       try {
-        fs.accessSync(filepath, fs.F_OK);
-        slef.data = require(filepath);
+        fs.accessSync(self.filepath, fs.F_OK);
+        self.data = require(self.filepath);
       } catch(e) {
-        fs.writeFileSync(filepath, JSON.stringify(self.data));
+        fs.writeFileSync(self.filepath, JSON.stringify(self.data));
       }
 
       return this;
