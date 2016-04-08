@@ -1,7 +1,7 @@
 /**
 * module name:  electron-data
 * author:       Dominik Winter
-* version:      1.0
+* version:      1.1
 * release date: 23.03.2016
 */
 
@@ -20,13 +20,15 @@
   * "app.getPath('userData')", the builtin function of Electron.
   *
   * @param {Object} options
-  *   - {String} dirname - Only needed if you will use this moduel without
-  *       Electron. Default is "electron-app"
   *   - {String} filename - Name for the file that will be stored and used.
   *       Default is "data"
   *   - {String} path - **When using Electron, use "app.getPath('userData')" as
   *       value. Absolute path to your application directory. Will be created
   *       if not already exists. Default is "home-dir-of-os/.electron-app/"
+  *   - {Boolean} autosave - If "true", the file will be updated on every
+  *       change. Default is "false"
+  *   - {Boolean} prettysave - If "true", the content of the file will be in a
+  *       human readable format. Default is "false"
   */
   class ElectronData {
 
@@ -35,15 +37,23 @@
 
       self.data = {};
       self.options = {
-        dirname: 'electron-app',
-        filename: 'data'
-      };
+        filename: 'data',
+        path: home +'/.electron-app',
 
-      self.options.path = home +'/.'+ self.options.dirname;
+        //
+        autosave: false,
+        prettysave: false
+      };
 
       self._setOptions(changedOptions);
 
       self.filepath = self.options.path +'/'+ self.options.filename +'.json';
+
+      if (self.options.autosave) {
+        Object.observe(self.data, (changes) => {
+          self.save();
+        });
+      }
 
       try {
         fs.accessSync(self.options.path, fs.F_OK);
@@ -163,16 +173,30 @@
     * save()
     * Saves the actual data to the file selected in constructor.
     *
+    * @param {Function} cb - callback
     * @return {Boolean}
     */
-    save() {
+    save(cb) {
+      var value;
+
+      if (this.options.prettysave) {
+        value = JSON.stringify(this.data, null, 2);
+      } else {
+        value = JSON.stringify(this.data);
+      }
+
       fs.writeFile(this.filepath,
-          JSON.stringify(this.data),
+          value,
           {encoding: 'utf-8', flag: 'w+'},
           (err) => {
 
-        if (err) throw err;
-        return true;
+        var result = (err) ? false : true;
+        if (cb) {
+          cb(err, result);
+        } else {
+          if (err) throw err;
+          return result;
+        }
       });
     }
 

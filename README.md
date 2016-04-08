@@ -40,12 +40,12 @@ Without Electron:
 var ElectronData = require('electron-data');
 
 var settings = new ElectronData({
-  dirname: 'fancy-dir-name',
+  path: 'path/to/whatever/you/want',
   filename: 'settings'
 });
 ```
 
-When using ```electron-data``` without [Electron](https://github.com/atom/electron), the file will be automatically created in your home directory like that: ```/.fancy-dir-name/settings.json```.
+When using ```electron-data``` without [Electron](https://github.com/atom/electron), the file will be automatically created in your home directory like that: ```/path/to/whatever/you/want/settings.json```.
 
 Now you can do some magic with the ```settings``` variable. How? I will tell you now.
 
@@ -56,10 +56,10 @@ Now you can do some magic with the ```settings``` variable. How? I will tell you
 ##### ```new ElectronData(options)```
 Returns a new ElectronData instance.
 - ```options``` Object (optional)
-    - ```dirname``` String - Only needed if you will use ```electron-data``` without [Electron](https://github.com/atom/electron). Default is ```electron-app```
     - ```filename``` String - Name for the file that will be stored and used. Default is ```data```
     - ```path``` String - **When using [Electron](https://github.com/atom/electron), use ```app.getPath('userData')``` as value.** Absolute path to your application directory. Will be created if not already exists. Default is ```home-dir-of-os/.electron-app/```
-
+    - ```autosave``` Boolean - If ```true```, the file will be updated on every file change. Default is ```false```
+    - ```prettysave``` Boolean - If ```true```, the content of the file will be in a human readable format. Default is ```false```
 
 ##### ```ElectronData.getOptions()```
 Returns the options as object.
@@ -90,8 +90,9 @@ Unsets the property named ```key```.
 Clears all data. Be careful, the data can´t be restored.
 
 
-##### ```ElectronData.save()```
+##### ```ElectronData.save(callback)```
 Saves the data to the specified file.
+- ```callback``` Function - callback function
 
 
 # Development
@@ -103,4 +104,9 @@ npm test
 
 
 ## Release Notes
+- ```1.1```
+  - removed ```dirname``` from constructor options
+  - added ```autosave```
+  - added ```prettysave```
+  - added callback to ```save``` function
 - ```1.0``` - Initial release

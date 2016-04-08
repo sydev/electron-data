@@ -14,7 +14,7 @@
   var ed;
   var filepath;
 
-  describe('ElectronData', () => {
+  describe('ElectronData (no options)', () => {
 
     // Construct class
     it('should create file in ".tmp"', (done) => {
@@ -85,6 +85,71 @@
       done();
     });
 
+  });
+
+  // With autosave function
+  describe('ElectronData (autosave)', () => {
+
+    it('should create file in ".tmp"', (done) => {
+      ed = new ElectronData({
+        filename: 'data-autosave',
+        path: PATH_TO_TEMP,
+        autosave: true
+      });
+
+      filepath = path.join(PATH_TO_TEMP, 'data-autosave.json');
+
+      fs.access(PATH_TO_TEMP, (err) => {
+        expect(err).to.be.null;
+        done();
+      });
+    });
+
+    // set key
+    it('should set key "test" with value "test_value" and save it in file (autosave)', (done) => {
+      ed.set('test', 'test_value');
+
+      fs.readFile(filepath, {encoding: 'utf-8'}, (err, data) => {
+        expect(err).to.be.null;
+        expect(JSON.parse(data)).to.be.object;
+        expect(JSON.parse(data).hasOwnProperty('test')).to.be.true;
+        expect(JSON.parse(data).test).to.be.equal('test_value');
+        done();
+      });
+    });
+
+  });
+
+  // With prettysave function
+  describe('ElectronData (prettysave)', () => {
+
+    it('should create file in ".tmp"', (done) => {
+      ed = new ElectronData({
+        filename: 'data-prettysave',
+        path: PATH_TO_TEMP,
+        prettysave: true
+      });
+
+      filepath = path.join(PATH_TO_TEMP, 'data-prettysave.json');
+
+      fs.access(PATH_TO_TEMP, (err) => {
+        expect(err).to.be.null;
+        done();
+      });
+    });
+
+    // set key
+    it('should set key "test" with value "test_value" and save it in pretty', (done) => {
+      ed.set('test', 'test_value');
+      ed.save();
+
+      fs.readFile(filepath, {encoding: 'utf-8'}, (err, data) => {
+        expect(err).to.be.null;
+        expect(JSON.parse(data)).to.be.object;
+        expect(data).to.be.equal(JSON.stringify({test: 'test_value'}, null, 2));
+        done();
+      });
+    });
 
   });
 })();
