@@ -110,9 +110,9 @@
       ed.set('test', 'test_value');
 
       fs.readFile(filepath, {encoding: 'utf-8'}, (err, data) => {
-        expect(err).to.be.null;
+        expect(err).to.be.equal(null);
         expect(JSON.parse(data)).to.be.object;
-        expect(JSON.parse(data).hasOwnProperty('test')).to.be.true;
+        expect(JSON.parse(data).hasOwnProperty('test')).to.be.equal(true);
         expect(JSON.parse(data).test).to.be.equal('test_value');
         done();
       });

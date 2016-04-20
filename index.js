@@ -39,8 +39,6 @@
       self.options = {
         filename: 'data',
         path: home +'/.electron-app',
-
-        //
         autosave: false,
         prettysave: false
       };
@@ -50,7 +48,9 @@
       self.filepath = self.options.path +'/'+ self.options.filename +'.json';
 
       if (self.options.autosave) {
+        require('./object-observe.js');
         Object.observe(self.data, (changes) => {
+          console.log(changes);
           self.save();
         });
       }
