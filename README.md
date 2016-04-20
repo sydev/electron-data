@@ -104,6 +104,8 @@ npm test
 
 
 ## Release Notes
+- ```1.1.1```
+  - added ```Object.observe``` polyfill, because it will be removed in future V8 releases
 - ```1.1```
   - removed ```dirname``` from constructor options
   - added ```autosave```

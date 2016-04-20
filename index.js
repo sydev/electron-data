@@ -1,7 +1,7 @@
 /**
 * module name:  electron-data
 * author:       Dominik Winter
-* version:      1.1
+* version:      1.1.1
 * release date: 23.03.2016
 */
 
