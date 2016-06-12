@@ -88,7 +88,7 @@
   });
 
   // With autosave function
-  /*describe('ElectronData (autosave)', () => {
+  describe('ElectronData (autosave)', () => {
 
     it('should create file in ".tmp"', (done) => {
       ed = new ElectronData({
@@ -118,7 +118,7 @@
       });
     });
 
-  });*/
+  });
 
   // With prettysave function
   describe('ElectronData (prettysave)', () => {

@@ -1,7 +1,7 @@
 /**
 * module name:  electron-data
 * author:       Dominik Winter
-* version:      1.1.2
+* version:      1.2.0
 * release date: 12.06.2016
 */
 
@@ -11,7 +11,6 @@
   const home      = require('user-home');
   const mkdirp    = require('mkdirp');
   const fs        = require('fs');
-  const observer  = require('observe');
 
 
   /**
@@ -51,14 +50,6 @@
 
       self.filepath = self.options.path +'/'+ self.options.filename +'.json';
 
-      if (self.options.autosave) {
-        observer(self.data);
-
-        observer.on('change', (changes) => {
-          self.save();
-        });
-      }
-
       try {
         fs.accessSync(self.options.path, fs.F_OK);
       } catch(e) {
@@ -70,6 +61,23 @@
         self.data = require(self.filepath);
       } catch(e) {
         fs.writeFileSync(self.filepath, JSON.stringify(self.data));
+      }
+
+
+      // autosave functionality
+      if (self.options.autosave) {
+        const objectChangeHandler = {
+          get: (target, property) => {
+            return target[property];
+          },
+          set: (target, property, value, receiver) => {
+            target[property] = value;
+            self.save();
+            return true;
+          }
+        };
+
+        self.data = new Proxy(self.data, objectChangeHandler);
       }
 
       return this;

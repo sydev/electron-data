@@ -104,8 +104,8 @@ npm test
 
 
 ## Release Notes
-- ```1.1.2```
-  - removed ```Object.observe``` polyfill and added ```observe``` package instead
+- ```1.2```
+  - removed ```Object.observe``` polyfill and added an elegant Proxy solution.
   - added ```lastUpdate``` option. Read [Usage](#usage) for further informations.
 - ```1.1.1```
   - added ```Object.observe``` polyfill, because it will be removed in future V8 releases
