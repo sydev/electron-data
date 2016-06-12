@@ -88,7 +88,7 @@
   });
 
   // With autosave function
-  describe('ElectronData (autosave)', () => {
+  /*describe('ElectronData (autosave)', () => {
 
     it('should create file in ".tmp"', (done) => {
       ed = new ElectronData({
@@ -118,7 +118,7 @@
       });
     });
 
-  });
+  });*/
 
   // With prettysave function
   describe('ElectronData (prettysave)', () => {
@@ -147,6 +147,39 @@
         expect(err).to.be.null;
         expect(JSON.parse(data)).to.be.object;
         expect(data).to.be.equal(JSON.stringify({test: 'test_value'}, null, 2));
+        done();
+      });
+    });
+
+  });
+
+  // With lastUpdate function
+  describe('ElectronData (lastUpdate)', () => {
+
+    it('should create file in ".tmp"', (done) => {
+      ed = new ElectronData({
+        filename: 'data-lastUpdate',
+        path: PATH_TO_TEMP,
+        lastUpdate: true
+      });
+
+      filepath = path.join(PATH_TO_TEMP, 'data-lastUpdate.json');
+
+      fs.access(PATH_TO_TEMP, (err) => {
+        expect(err).to.be.null;
+        done();
+      });
+    });
+
+    // set key
+    it('should set key "test" with value "test_value" and save it with lastUpdate property', (done) => {
+      ed.set('test', 'test_value');
+      ed.save();
+
+      fs.readFile(filepath, {encoding: 'utf-8'}, (err, data) => {
+        expect(err).to.be.null;
+        expect(JSON.parse(data)).to.be.object;
+        expect(data.lastUpdate).to.be.string;
         done();
       });
     });

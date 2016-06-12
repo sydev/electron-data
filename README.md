@@ -1,7 +1,7 @@
 # electron-data
 
-An easy way to save data, settings or anything else as JSON file in an application folder,
-using a simple localStorage-like API.
+An easy way to save data, settings or anything else as JSON file in an
+application folder, using a simple localStorage-like API.
 
 Primary developed to work with [Electron](https://github.com/atom/electron),
 but also works in any node application.
@@ -19,8 +19,7 @@ but also works in any node application.
 npm install --save electron-data
 ```
 
-That´s all. You´re done. But wait...You want to use
-it, too?
+That´s all. You´re done. But wait...You want to use it, too?
 
 ## Usage
 
@@ -60,6 +59,7 @@ Returns a new ElectronData instance.
     - ```path``` String - **When using [Electron](https://github.com/atom/electron), use ```app.getPath('userData')``` as value.** Absolute path to your application directory. Will be created if not already exists. Default is ```home-dir-of-os/.electron-app/```
     - ```autosave``` Boolean - If ```true```, the file will be updated on every file change. Default is ```false```
     - ```prettysave``` Boolean - If ```true```, the content of the file will be in a human readable format. Default is ```false```
+    - ```lastUpdate``` Boolean - If "true", a property is set, which contains the last update datetime.
 
 ##### ```ElectronData.getOptions()```
 Returns the options as object.
@@ -104,6 +104,9 @@ npm test
 
 
 ## Release Notes
+- ```1.1.2```
+  - removed ```Object.observe``` polyfill and added ```observe``` package instead
+  - added ```lastUpdate``` option. Read [Usage](#usage) for further informations.
 - ```1.1.1```
   - added ```Object.observe``` polyfill, because it will be removed in future V8 releases
 - ```1.1```

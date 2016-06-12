@@ -1,16 +1,17 @@
 /**
 * module name:  electron-data
 * author:       Dominik Winter
-* version:      1.1.1
-* release date: 23.03.2016
+* version:      1.1.2
+* release date: 12.06.2016
 */
 
 (function() {
   'use strict';
 
-  const home    = require('user-home');
-  const mkdirp  = require('mkdirp');
-  const fs      = require('fs');
+  const home      = require('user-home');
+  const mkdirp    = require('mkdirp');
+  const fs        = require('fs');
+  const observer  = require('observe');
 
 
   /**
@@ -29,6 +30,8 @@
   *       change. Default is "false"
   *   - {Boolean} prettysave - If "true", the content of the file will be in a
   *       human readable format. Default is "false"
+  *   - {Boolean} lastUpdate - If "true", a property is set, which contains the
+  *       last update datetime.
   */
   class ElectronData {
 
@@ -40,7 +43,8 @@
         filename: 'data',
         path: home +'/.electron-app',
         autosave: false,
-        prettysave: false
+        prettysave: false,
+        lastUpdate: false
       };
 
       self._setOptions(changedOptions);
@@ -48,9 +52,9 @@
       self.filepath = self.options.path +'/'+ self.options.filename +'.json';
 
       if (self.options.autosave) {
-        require('./object-observe.js');
-        Object.observe(self.data, (changes) => {
-          console.log(changes);
+        observer(self.data);
+
+        observer.on('change', (changes) => {
           self.save();
         });
       }
@@ -178,6 +182,15 @@
     */
     save(cb) {
       var value;
+
+      if (this.options.lastUpdate) {
+        var timestamp = Date.now(),
+          date = new Date(timestamp).toLocaleString();
+
+        this.data.lastUpdate = date;
+      } else {
+        if (this.data.hasOwnProperty('lastUpdate')) delete this.data.lastUpdate;
+      }
 
       if (this.options.prettysave) {
         value = JSON.stringify(this.data, null, 2);
