@@ -107,7 +107,7 @@ npm test
 
 ## Release Notes
 - ```1.2.1```
-  - Fixed: silent error on non-valid JSON values #1. For an overview of allowed
+  - Fixed: silent error on non-valid JSON values (Issue #1). For an overview of allowed
     value types, have a look at [json.org](http://www.json.org/).
 - ```1.2```
   - removed ```Object.observe``` polyfill and added an elegant Proxy solution.
