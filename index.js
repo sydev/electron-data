@@ -1,8 +1,8 @@
 /**
 * module name:  electron-data
 * author:       Dominik Winter
-* version:      1.2.0
-* release date: 12.06.2016
+* version:      1.2.1
+* release date: 12.11.2016
 */
 
 (function() {
@@ -80,7 +80,7 @@
         self.data = new Proxy(self.data, objectChangeHandler);
       }
 
-      return this;
+      return self;
     }
 
 
@@ -91,7 +91,8 @@
     * @return {Object} options
     */
     getOptions() {
-      return this.options;
+      let self = this;
+      return self.options;
     }
 
 
@@ -101,8 +102,10 @@
     *
     */
     _setOptions(changedOptions) {
+      let self = this;
+
       for (let p in changedOptions) {
-        this.options[p] = changedOptions[p];
+        self.options[p] = changedOptions[p];
       }
     }
 
@@ -115,7 +118,8 @@
     * @return {Boolean}
     */
     has(key) {
-      return this.data.hasOwnProperty(key);
+      let self = this;
+      return self.data.hasOwnProperty(key);
     }
 
 
@@ -128,30 +132,48 @@
     * @return {?} property value / data
     */
     get(key) {
-      if (!key) return this.data;
+      let self  = this,
+        item    = null;
 
-      for (let p in this.data) {
+      if (!key) return self.data;
+
+      for (let p in self.data) {
         if (p == key) {
-          return this.data[p];
+          item = self.data[p];
+          break;
         }
       }
+
+      return item;
     }
 
 
     /**
     * set()
     * Sets the given value and given key in data, and return all data. If no
-    * key or value is given, return false.
+    * key or value is given, or the value is an unsupported JSON value type, an
+    * error is thrown.
     *
     * @param {string} key
     * @param {?} value
     * @return {Object/Boolean}
     */
     set(key, value) {
-      if (!key || !value) return false;
+      let self  = this,
+        err     = null;
 
-      this.data[key] = value;
-      return this.data;
+      if (!key || typeof key !== 'string') {
+        err = new Error('Key must be string.');
+      }
+
+      if (value === undefined || (typeof value === 'number' && isNaN(value))) {
+        err = new Error('Value must be a valid JSON value.');
+      }
+
+      if (err !== null) throw err;
+
+      self.data[key] = value;
+      return self.data;
     }
 
 
@@ -165,7 +187,9 @@
     unset(key) {
       if (!key) return false;
 
-      return delete this.data[key];
+      let self = this;
+
+      return delete self.data[key];
     }
 
 
@@ -176,8 +200,10 @@
     * @return {Object} data - the emptied data set
     */
     clear() {
-      this.data = {};
-      return this.data;
+      let self = this;
+
+      self.data = {};
+      return self.data;
     }
 
 
@@ -189,36 +215,35 @@
     * @return {Boolean}
     */
     save(cb) {
-      var value;
+      let self  = this,
+        content = null,
+        saved   = null;
 
-      if (this.options.lastUpdate) {
-        var timestamp = Date.now(),
+      if (self.options.lastUpdate) {
+        let timestamp = Date.now(),
           date = new Date(timestamp).toLocaleString();
 
-        this.data.lastUpdate = date;
+        self.data.lastUpdate = date;
       } else {
-        if (this.data.hasOwnProperty('lastUpdate')) delete this.data.lastUpdate;
+        if (self.data.hasOwnProperty('lastUpdate')) delete self.data.lastUpdate;
       }
 
-      if (this.options.prettysave) {
-        value = JSON.stringify(this.data, null, 2);
+      if (self.options.prettysave) {
+        content = JSON.stringify(self.data, null, 2);
       } else {
-        value = JSON.stringify(this.data);
+        content = JSON.stringify(self.data);
       }
 
-      fs.writeFile(this.filepath,
-          value,
-          {encoding: 'utf-8', flag: 'w+'},
-          (err) => {
 
-        var result = (err) ? false : true;
-        if (cb) {
-          cb(err, result);
-        } else {
-          if (err) throw err;
-          return result;
-        }
-      });
+      if (cb) {
+        fs.writeFile(self.filepath, content, {encoding: 'utf-8', flag: 'w+'}, (err) => {
+          saved = (err) ? false : true;
+          cb(err, saved);
+        });
+      } else {
+        saved = fs.writeFileSync(self.filepath, content, {encoding: 'utf-8', flag: 'w+'});
+        return saved;
+      }
     }
 
   }

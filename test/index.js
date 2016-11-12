@@ -1,18 +1,19 @@
 (function() {
   'use strict';
 
-  const chai = require('chai');
-  const ElectronData = require('../index.js');
-  const path = require('path');
-  const fs = require('fs');
+  const chai          = require('chai');
+  const ElectronData  = require('../index.js');
+  const fs            = require('fs');
+  const path          = require('path');
 
-  const PATH_TO_TEMP = path.join(__dirname, '.tmp');
+  const PATH_TO_TEMP  = path.join(__dirname, '.tmp');
 
 
-  var expect = chai.expect;
+  let expect  = chai.expect,
+    should    = chai.should();
 
-  var ed;
-  var filepath;
+  let ed;
+  let filepath;
 
   describe('ElectronData (no options)', () => {
 
@@ -67,15 +68,19 @@
     // save file
     it('should save "{"test": "test_value"}" in file', (done) => {
       ed.set('test', 'test_value');
-      ed.save();
 
-      fs.readFile(filepath, 'utf-8', (err, data) => {
-        data = JSON.parse(data);
-
+      ed.save((err, saved) => {
         expect(err).to.be.null;
-        expect(ed.has('test')).to.be.true;
-        expect(data.test).to.equal('test_value');
-        done();
+        expect(saved).to.be.true;
+
+        fs.readFile(filepath, 'utf-8', (err, data) => {
+          data = JSON.parse(data);
+
+          expect(err).to.be.null;
+          expect(ed.has('test')).to.be.true;
+          expect(data.test).to.equal('test_value');
+          done();
+        });
       });
     });
 
@@ -109,11 +114,13 @@
     it('should set key "test" with value "test_value" and save it in file (autosave)', (done) => {
       ed.set('test', 'test_value');
 
-      fs.readFile(filepath, {encoding: 'utf-8'}, (err, data) => {
+      fs.readFile(filepath, 'utf-8', (err, data) => {
+        data = JSON.parse(data);
+
         expect(err).to.be.equal(null);
-        expect(JSON.parse(data)).to.be.object;
-        expect(JSON.parse(data).hasOwnProperty('test')).to.be.equal(true);
-        expect(JSON.parse(data).test).to.be.equal('test_value');
+        expect(data).to.be.object;
+        expect(data.hasOwnProperty('test')).to.be.true;
+        expect(data.test).to.be.equal('test_value');
         done();
       });
     });
@@ -141,13 +148,19 @@
     // set key
     it('should set key "test" with value "test_value" and save it in pretty', (done) => {
       ed.set('test', 'test_value');
-      ed.save();
 
-      fs.readFile(filepath, {encoding: 'utf-8'}, (err, data) => {
+      ed.save((err, saved) => {
         expect(err).to.be.null;
-        expect(JSON.parse(data)).to.be.object;
-        expect(data).to.be.equal(JSON.stringify({test: 'test_value'}, null, 2));
-        done();
+        expect(saved).to.be.true;
+
+        fs.readFile(filepath, 'utf-8', (err, data) => {
+          data = JSON.parse(data);
+
+          expect(err).to.be.null;
+          expect(data).to.be.object;
+          expect(data.test).to.be.equal('test_value');
+          done();
+        });
       });
     });
 
@@ -174,15 +187,290 @@
     // set key
     it('should set key "test" with value "test_value" and save it with lastUpdate property', (done) => {
       ed.set('test', 'test_value');
-      ed.save();
 
-      fs.readFile(filepath, {encoding: 'utf-8'}, (err, data) => {
+      ed.save((err, saved) => {
         expect(err).to.be.null;
-        expect(JSON.parse(data)).to.be.object;
-        expect(data.lastUpdate).to.be.string;
-        done();
+        expect(saved).to.be.true;
+
+        fs.readFile(filepath, 'utf-8', (err, data) => {
+          data = JSON.parse(data);
+
+          expect(err).to.be.null;
+          expect(data).to.be.object;
+          expect(data.lastUpdate).to.be.string;
+          done();
+        });
       });
     });
 
   });
+
+  // Some tests on primitive types
+  describe('Setting different primitive types', () => {
+
+    it('should create file in ".tmp"', (done) => {
+      ed = new ElectronData({
+        filename: 'data-primitives',
+        path: PATH_TO_TEMP
+      });
+
+      filepath = path.join(PATH_TO_TEMP, 'data-primitives.json');
+
+      fs.access(PATH_TO_TEMP, (err) => {
+        expect(err).to.be.null;
+        done();
+      });
+    });
+
+    it('should set "number" to 0', (done) => {
+      ed.set('number', 0);
+
+      ed.save((err, saved) => {
+        expect(err).to.be.null;
+        expect(saved).to.be.true;
+
+        fs.readFile(filepath, 'utf-8', (err, data) => {
+          data = JSON.parse(data);
+
+          expect(err).to.be.null;
+          expect(data).to.be.object;
+          expect(data.number).to.be.equal(0);
+          done();
+        });
+      });
+    });
+
+    it('should set "number" to 1', (done) => {
+      ed.set('number', 1);
+
+      ed.save((err, saved) => {
+        expect(err).to.be.null;
+        expect(saved).to.be.true;
+
+        fs.readFile(filepath, 'utf-8', (err, data) => {
+          data = JSON.parse(data);
+
+          expect(err).to.be.null;
+          expect(data).to.be.object;
+          expect(data.number).to.be.equal(1);
+          done();
+        });
+      });
+    });
+
+    it('should set "number" to 0 with `new Number()`', (done) => {
+      ed.set('number', new Number());
+
+      ed.save((err, saved) => {
+        expect(err).to.be.null;
+        expect(saved).to.be.true;
+
+        fs.readFile(filepath, 'utf-8', (err, data) => {
+          data = JSON.parse(data);
+
+          expect(err).to.be.null;
+          expect(data).to.be.object;
+          expect(data.number).to.be.equal(0);
+          done();
+        });
+      });
+    });
+
+    it('should set "number" to 1 with `new Number(1)`', (done) => {
+      ed.set('number', new Number(1));
+
+      ed.save((err, saved) => {
+        expect(err).to.be.null;
+        expect(saved).to.be.true;
+
+        fs.readFile(filepath, 'utf-8', (err, data) => {
+          data = JSON.parse(data);
+
+          expect(err).to.be.null;
+          expect(data).to.be.object;
+          expect(data.number).to.be.equal(1);
+          done();
+        });
+      });
+    });
+
+    it('should set "string" to ""', (done) => {
+      ed.set('string', '');
+
+      ed.save((err, saved) => {
+        expect(err).to.be.null;
+        expect(saved).to.be.true;
+
+        fs.readFile(filepath, 'utf-8', (err, data) => {
+          data = JSON.parse(data);
+
+          expect(err).to.be.null;
+          expect(data).to.be.object;
+          expect(data.string).to.be.empty;
+          done();
+        });
+      });
+    });
+
+    it('should set "string" to "" with `new String()`', (done) => {
+      ed.set('string', new String());
+
+      ed.save((err, saved) => {
+        expect(err).to.be.null;
+        expect(saved).to.be.true;
+
+        fs.readFile(filepath, 'utf-8', (err, data) => {
+          data = JSON.parse(data);
+
+          expect(err).to.be.null;
+          expect(data).to.be.object;
+          expect(data.string).to.be.empty;
+          done();
+        });
+      });
+    });
+
+    it('should set "string" to "test_string" with `new String("test_string")`', (done) => {
+      ed.set('string', new String('test_string'));
+
+      ed.save((err, saved) => {
+        expect(err).to.be.null;
+        expect(saved).to.be.true;
+
+        fs.readFile(filepath, 'utf-8', (err, data) => {
+          data = JSON.parse(data);
+
+          expect(err).to.be.null;
+          expect(data).to.be.object;
+          expect(data.string).to.be.eql('test_string');
+          done();
+        });
+      });
+    });
+
+    it('should set "bool" to false', (done) => {
+      ed.set('bool', false);
+
+      ed.save((err, saved) => {
+        expect(err).to.be.null;
+        expect(saved).to.be.true;
+
+        fs.readFile(filepath, 'utf-8', (err, data) => {
+          data = JSON.parse(data);
+
+          expect(err).to.be.null;
+          expect(data).to.be.object;
+          expect(data.bool).to.be.false;
+          done();
+        });
+      });
+    });
+
+    it('should set "bool" to true', (done) => {
+      ed.set('bool', true);
+
+      ed.save((err, saved) => {
+        expect(err).to.be.null;
+        expect(saved).to.be.true;
+
+        fs.readFile(filepath, 'utf-8', (err, data) => {
+          data = JSON.parse(data);
+
+          expect(err).to.be.null;
+          expect(data).to.be.object;
+          expect(data.bool).to.be.true;
+          done();
+        });
+      });
+    });
+
+    it('should set "bool" to false with `new Boolean()`', (done) => {
+      ed.set('bool', new Boolean());
+
+      ed.save((err, saved) => {
+        expect(err).to.be.null;
+        expect(saved).to.be.true;
+
+        fs.readFile(filepath, 'utf-8', (err, data) => {
+          data = JSON.parse(data);
+
+          expect(err).to.be.null;
+          expect(data).to.be.object;
+          expect(data.bool).to.be.false;
+          done();
+        });
+      });
+    });
+
+    it('should set "bool" to false with `new Boolean(0)`', (done) => {
+      ed.set('bool', new Boolean(0));
+
+      ed.save((err, saved) => {
+        expect(err).to.be.null;
+        expect(saved).to.be.true;
+
+        fs.readFile(filepath, 'utf-8', (err, data) => {
+          data = JSON.parse(data);
+
+          expect(err).to.be.null;
+          expect(data).to.be.object;
+          expect(data.bool).to.be.false;
+          done();
+        });
+      });
+    });
+
+    it('should set "bool" to true with `new Boolean(1)`', (done) => {
+      ed.set('bool', new Boolean(1));
+
+      ed.save((err, saved) => {
+        expect(err).to.be.null;
+        expect(saved).to.be.true;
+
+        fs.readFile(filepath, 'utf-8', (err, data) => {
+          data = JSON.parse(data);
+
+          expect(err).to.be.null;
+          expect(data).to.be.object;
+          expect(data.bool).to.be.true;
+          done();
+        });
+      });
+    });
+
+    it('should set "test" to null', (done) => {
+      ed.set('test', null);
+
+      ed.save((err, saved) => {
+        expect(err).to.be.null;
+        expect(saved).to.be.true;
+
+        fs.readFile(filepath, 'utf-8', (err, data) => {
+          data = JSON.parse(data);
+
+          expect(err).to.be.null;
+          expect(data).to.be.object;
+          expect(data.test).to.be.null;
+          done();
+        });
+      });
+    });
+
+    it('should throw error on setting "test" to undefined', (done) => {
+      (function() {
+        ed.set('test', undefined);
+      }).should.throw(Error, /must be a valid JSON value/);
+      done();
+    });
+
+    it('should throw error on setting "test" to NaN', (done) => {
+      (function() {
+        ed.set('test', NaN);
+      }).should.throw(Error, /must be a valid JSON value/);
+      done();
+    });
+
+  });
+
+
 })();

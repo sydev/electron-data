@@ -76,7 +76,9 @@ If key is given and the data file has an property named ```key```, returns the v
 
 
 ##### ```ElectronData.set(key, value)```
-Sets the given ```value``` to the given ```key``` in the data file. If one of both is missing, returns false.
+Sets the given ```value``` to the given ```key``` in the data file. If one of both is missing, the key isn´t a
+string or the value isn´t a valid JSON value, the function throws an error. For an overview of allowed value
+types, have a look at [json.org](http://www.json.org/).
 - ```key``` String - Property name
 - ```value``` ? - Property value. Can be any JSON conform data.
 
@@ -104,11 +106,14 @@ npm test
 
 
 ## Release Notes
+- ```1.2.1```
+  - Fixed: silent error on non-valid JSON values #1. For an overview of allowed
+    value types, have a look at [json.org](http://www.json.org/).
 - ```1.2```
   - removed ```Object.observe``` polyfill and added an elegant Proxy solution.
   - added ```lastUpdate``` option. Read [Usage](#usage) for further informations.
 - ```1.1.1```
-  - added ```Object.observe``` polyfill, because it will be removed in future V8 releases
+  - added ```Object.observe``` polyfill, because is removed in future V8 releases
 - ```1.1```
   - removed ```dirname``` from constructor options
   - added ```autosave```
