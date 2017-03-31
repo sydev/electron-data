@@ -11,6 +11,7 @@
   const home      = require('user-home');
   const mkdirp    = require('mkdirp');
   const fs        = require('fs');
+  const reload    = require('require-reload')(require);
 
 
   /**
@@ -61,23 +62,6 @@
         self.data = require(self.filepath);
       } catch(e) {
         fs.writeFileSync(self.filepath, JSON.stringify(self.data));
-      }
-
-
-      // autosave functionality
-      if (self.options.autosave) {
-        const objectChangeHandler = {
-          get: (target, property) => {
-            return target[property];
-          },
-          set: (target, property, value, receiver) => {
-            target[property] = value;
-            self.save();
-            return true;
-          }
-        };
-
-        self.data = new Proxy(self.data, objectChangeHandler);
       }
 
       return self;
@@ -135,6 +119,8 @@
       let self  = this,
         item    = null;
 
+      self.data = reload(self.filepath);
+
       if (!key) return self.data;
 
       for (let p in self.data) {
@@ -173,6 +159,9 @@
       if (err !== null) throw err;
 
       self.data[key] = value;
+
+      if (self.options.autosave) { self.save(); }
+
       return self.data;
     }
 
@@ -189,7 +178,11 @@
 
       let self = this;
 
-      return delete self.data[key];
+      let result = delete self.data[key]
+
+      if (self.options.autosave) { self.save(); }
+
+      return result;
     }
 
 
