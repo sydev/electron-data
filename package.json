@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "mkdirp": "^0.5.1",
+    "require-reload": "^0.2.2",
     "user-home": "^2.0.0"
   },
   "devDependencies": {
