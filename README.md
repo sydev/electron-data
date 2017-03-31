@@ -106,6 +106,8 @@ npm test
 
 
 ## Release Notes
+- ```1.2.2````
+  - Reload the data on ElectronDate.get()
 - ```1.2.1```
   - Fixed: silent error on non-valid JSON values (Issue #1). For an overview of allowed
     value types, have a look at [json.org](http://www.json.org/).
