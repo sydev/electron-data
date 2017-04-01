@@ -161,6 +161,12 @@ To save the data more readable, set the ```prettysave``` option.
 electron_data.config({prettysave: true});
 ```
 
+To save a ```lastUpdate``` value , set the ```lastUpdate```option.
+
+```JavaScript
+electron_data.config({lastUpdate: true});
+```
+
 # Development
 
 Run test:
