@@ -161,29 +161,42 @@
 
   describe('Save', () => {
 
-    afterAll(() => {
+    /*afterAll(() => {
       return fs.remove(desired_config.path);
-    });
+    });*/
 
     test('Save explicit', () => {
-      let desired_string = '{"test-string":"test","test-object":{"test":"test"},"test-array":["test"],"test-number":0,"test-true":true,"test-false":false,"test-null":null}',
-        desired_json = JSON.parse(desired_string);
+      let desired_json = {
+        "test-string": "test",
+        "test-object": {"test": "test"},
+        "test-array": ["test"],
+        "test-number": 0,
+        "test-true": true,
+        "test-false": false,
+        "test-null": null
+      };
 
       return electron_data.save()
         .then(res => {
           expect(res).toBe(undefined);
 
           return fs.readFile(desired_config.path +'/test.json', 'utf-8')
-            .then(content => {
-              expect(JSON.parse(content)).toMatchObject(desired_json);
-            });
+            .then(content => expect(JSON.parse(content)).toMatchObject(desired_json));
         })
         .catch(err => expect(err).toBeNull());
     });
 
     test('Autosave', () => {
-      let desired_string = '{"test-string":"test","test-object":{"test":"test"},"test-array":["test"],"test-number":0,"test-true":true,"test-false":false,"test-null":null,"test-autosave":"test"}',
-        desired_json = JSON.parse(desired_string);
+      let desired_json = {
+        "test-string": "test",
+        "test-object": {"test": "test"},
+        "test-array": ["test"],
+        "test-number": 0,
+        "test-true": true,
+        "test-false": false,
+        "test-null": null,
+        "test-autosave": "test"
+      };
 
       desired_config.autosave = true;
 
@@ -194,16 +207,23 @@
           expect(data).toMatchObject(desired_json);
 
           return fs.readFile(desired_config.path +'/test.json', 'utf-8')
-            .then(content => {
-              expect(JSON.parse(content)).toMatchObject(desired_json);
-            });
+            .then(content => expect(JSON.parse(content)).toMatchObject(desired_json));
         })
         .catch(err => expect(err).toBeNull());
     });
 
     test('Save pretty', () => {
-      let desired_string = `{"test-string": "test","test-object": {"test": "test"},"test-array": ["test"],"test-number": 0,"test-true": true,"test-false": false,"test-null": null, "test-autosave": "test", "test-prettysave": "test"}`,
-        desired_json = JSON.parse(desired_string);
+      let desired_json = {
+          "test-string": "test",
+          "test-object": {"test": "test"},
+          "test-array": ["test"],
+          "test-number": 0,
+          "test-true": true,
+          "test-false": false,
+          "test-null": null,
+          "test-autosave": "test",
+          "test-prettysave": "test"
+        };
 
       desired_config.prettysave = true;
 
@@ -217,6 +237,36 @@
             .then(content => {
               expect(JSON.parse(content)).toMatchObject(desired_json);
             });
+        })
+        .catch(err => expect(err).toBeNull());
+    });
+
+    test('Save with last update info', () => {
+      let desired_json = {
+          "test-string": "test",
+          "test-object": {"test": "test"},
+          "test-array": ["test"],
+          "test-number": 0,
+          "test-true": true,
+          "test-false": false,
+          "test-null": null,
+          "test-autosave": "test",
+          "test-prettysave": "test",
+          "test-lastUpdate": "test",
+          "lastUpdate": new Date(Date.now()).toISOString()
+        };
+
+      desired_config.lastUpdate = true;
+
+      electron_data.config({lastUpdate: true});
+
+      return electron_data.set('test-lastUpdate', 'test')
+        .then(data => {
+          data.lastUpdate = desired_json.lastUpdate;
+          expect(data).toMatchObject(desired_json);
+
+          return fs.readFile(desired_config.path +'/test.json', 'utf-8')
+            .then(content => expect(JSON.parse(content)).toMatchObject(desired_json));
         })
         .catch(err => expect(err).toBeNull());
     });

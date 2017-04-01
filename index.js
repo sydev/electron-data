@@ -35,6 +35,8 @@
   };
 
   /**
+   * Get the current settings
+   * 
    * @return {Promise<Object>} The options object
    */
   const getOptions = () => {
@@ -42,6 +44,7 @@
   };
 
   /**
+   * Checks if the stored data has a value with given key.
    * 
    * @param {String} key - A String to search for in the data object properties
    * @return {Promise<Boolean>} A boolean value, either true when key exists or false if it doesn´t
@@ -51,6 +54,7 @@
   };
 
   /**
+   * Get the value for given key.
    * 
    * @param {String} key - A String to search for in the data object properties.
    * @return {Promise<?>} Any type of valid JSON value, if the key exists. 
@@ -64,6 +68,7 @@
   };
 
   /**
+   * Set a key => value pair.
    * 
    * @param {String} key - A String to add to the data object properties.
    * @param {?} value - Any valid JSON value to add to "key"
@@ -89,6 +94,8 @@
   };
 
   /**
+   * Remove a key => value at given key.
+   * 
    * @param {String} key - A String to remove from the data object.
    * @return {Promise<boolean>|Promise<Error>}
    */
@@ -109,6 +116,8 @@
   };
 
   /**
+   * Clear the whole data object. Caution: The data can´t be recoverd.
+   * 
    * @return {Promise<Object>} An empty object
    */
   const clear = () => {
@@ -122,17 +131,23 @@
   };
 
   /**
+   * Save the data to a JSON file. Change the config to move the location and the filename.
+   * 
    * @return {Promise<undefined>|Promise<Error>}
    */
   const save = () => {
-    let pretty = (self.options.prettysave) ? 2 : null;
-    let data = JSON.stringify(self.data, null, pretty);
+    let pretty  = (self.options.prettysave) ? 2 : null,
+      data      = Object.assign({}, self.data);
 
-    return fs.outputFile(self.filepath, data, 'utf-8');
+    if (self.options.lastUpdate) data.lastUpdate = new Date(Date.now()).toISOString();
+
+    return fs.outputFile(self.filepath, JSON.stringify(data, null, pretty), 'utf-8');
   };
 
-
   /**
+   * Get the whole data object.
+   * 
+   * @private
    * @return {Promise<Object>} The whole data object
    */
   const __getAll = () => {
@@ -140,7 +155,9 @@
   };
 
   /**
+   * Extend/Override the whole data object. 
    * 
+   * @private
    * @param {Object} data - An Object to set as data object.
    * @return {Promise<Object>} The whole data object
    */
