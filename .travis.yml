@@ -6,3 +6,5 @@ node_js:
 branches:
   only:
     - master
+    - v2.x
+
