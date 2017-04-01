@@ -11,6 +11,13 @@
     "name": "Dominik Winter"
   },
   "license": "MIT",
+  "keywords": [
+    "electron",
+    "json",
+    "localstorage",
+    "settings",
+    "data"
+  ],
   "dependencies": {
     "fs-promise": "^2.0.2",
     "user-home": "^2.0.0"
