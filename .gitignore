@@ -1,4 +1,3 @@
 .DS_Store
 node_modules
-__test__/temp
 *.log
