@@ -5,6 +5,8 @@
 An easy way to save data, settings or anything else as JSON file in an
 application folder, using a simple localStorage-like API, but promisified.
 
+For version 1.x see the [v1.x branch](https://github.com/sydev/electron-data/tree/v1.x)
+
 Primary developed to work with [Electron](https://github.com/atom/electron), but also works in any node application.
 
 ## Table of Contents
