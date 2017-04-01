@@ -180,8 +180,9 @@ npm test
 ## Release Notes
 - ```2.0.0```
   - Promisify all methods
+  - Not using the object-oriented notation anymore. For more informations have a look [@Usage](#usage)
 - ```1.2.2```
-  - Reload the data on ElectronDate.get()
+  - Reload the data on ElectronData.get()
 - ```1.2.1```
   - Fixed: silent error on non-valid JSON values (Issue #1). For an overview of allowed
     value types, have a look at [json.org](http://www.json.org/).
