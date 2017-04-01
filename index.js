@@ -23,7 +23,7 @@
   /**
    * Configuration for electron-data
    * 
-   * @param {Object} options 
+   * @param {Object} options - An object containing the options to override 
    */
   const config = options => {
     // Set the options
@@ -35,7 +35,7 @@
   };
 
   /**
-   * @return {Promise} options
+   * @return {Promise<Object>} The options object
    */
   const getOptions = () => {
     return Promise.resolve(self.options);
@@ -43,8 +43,8 @@
 
   /**
    * 
-   * @param {String} key
-   * @return {Promise} has key
+   * @param {String} key - A String to search for in the data object properties
+   * @return {Promise<Boolean>} A boolean value, either true when key exists or false if it doesn´t
    */
   const has = key => {
     return Promise.resolve(self.data.hasOwnProperty(key));
@@ -52,8 +52,8 @@
 
   /**
    * 
-   * @param {String} key 
-   * @return {Promise} 
+   * @param {String} key - A String to search for in the data object properties.
+   * @return {Promise<?>} Any type of valid JSON value, if the key exists. 
    */
   const get = key => {
     return has(key)
@@ -65,8 +65,9 @@
 
   /**
    * 
-   * @param {String} key 
-   * @param {?} value 
+   * @param {String} key - A String to add to the data object properties.
+   * @param {?} value - Any valid JSON value to add to "key"
+   * @return {Promise<Object>} The whole data object
    */
   const set = (key, value) => {
     if (!key) return Promise.reject(new Error('key must be given.'));
@@ -88,8 +89,8 @@
   };
 
   /**
-   * @param {String} key
-   * @return {Promise}
+   * @param {String} key - A String to remove from the data object.
+   * @return {Promise<boolean>|Promise<Error>}
    */
   const unset = key => {
     if (!key) return Promise.reject(new Error('key must be given.'));
@@ -108,7 +109,7 @@
   };
 
   /**
-   * @return {Promise}
+   * @return {Promise<Object>} An empty object
    */
   const clear = () => {
     self.data = {};
@@ -121,7 +122,7 @@
   };
 
   /**
-   * @return {Promise}
+   * @return {Promise<undefined>|Promise<Error>}
    */
   const save = () => {
     let pretty = (self.options.prettysave) ? 2 : null;
@@ -132,7 +133,7 @@
 
 
   /**
-   * @return {Promise}
+   * @return {Promise<Object>} The whole data object
    */
   const __getAll = () => {
     return Promise.resolve(self.data);
@@ -140,8 +141,8 @@
 
   /**
    * 
-   * @param {Object} data 
-   * @return {Promise}
+   * @param {Object} data - An Object to set as data object.
+   * @return {Promise<Object>} The whole data object
    */
   const __setAll = data => {
     if (!data) return Promise.reject(new Error('data must be given.'));
