@@ -4,3 +4,7 @@ node_js:
   - "6"
   - "5"
   - "4"
+branches:
+  only:
+    - master
+    - 2.0
