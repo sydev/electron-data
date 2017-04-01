@@ -15,6 +15,20 @@
   let ed;
   let filepath;
 
+  const rimraf = path => {
+    if (fs.existsSync(path)) {
+      fs.readdirSync(path).forEach((file, index) => {
+        let curPath = path + "/" + file;
+        if (fs.lstatSync(curPath).isDirectory()) { // recurse
+          deleteFolderRecursive(curPath);
+        } else { // delete file
+          fs.unlinkSync(curPath);
+        }
+      });
+      fs.rmdirSync(path);
+    }
+  };
+
   describe('ElectronData (no options)', () => {
 
     // Construct class
@@ -207,6 +221,8 @@
 
   // Some tests on primitive types
   describe('Setting different primitive types', () => {
+
+    after(() => rimraf(PATH_TO_TEMP));
 
     it('should create file in ".tmp"', (done) => {
       ed = new ElectronData({
