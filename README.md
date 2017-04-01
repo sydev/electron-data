@@ -53,8 +53,8 @@ Returns a new electron_data instance.
 - ```options``` Object (required)
     - ```filename``` String - Name for the file that will be stored and used. Default is ```data```
     - ```path``` String - **When using [Electron](https://github.com/atom/electron), use ```app.getPath('userData')``` as value.** Absolute path to your application directory. Will be created if not already exists. Default is ```home-dir-of-os/.electron-app/```
-    - ```autosave``` Boolean - If ```true```, the file will be updated on every file change. Default is ```false```
-    - ```prettysave``` Boolean - If ```true```, the content of the file will be in a human readable format. Default is ```false```
+    - ```autosave``` Boolean - If ```true```, the file will be updated on every data change. Default is ```false```
+    - ```prettysave``` Boolean - If ```true```, the content of the file will be in a more human readable format. Default is ```false```
     - ```lastUpdate``` Boolean - If "true", a property is set, which contains the last update datetime.
 
 ##### ```electron_data.getOptions()```
@@ -180,8 +180,9 @@ npm test
 ## Release Notes
 - ```2.0.0```
   - Promisify all methods
+  - Not using the object-oriented notation anymore. For more informations have a look [@Usage](#usage)
 - ```1.2.2```
-  - Reload the data on ElectronDate.get()
+  - Reload the data on ElectronData.get()
 - ```1.2.1```
   - Fixed: silent error on non-valid JSON values (Issue #1). For an overview of allowed
     value types, have a look at [json.org](http://www.json.org/).
