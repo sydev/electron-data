@@ -18,6 +18,14 @@
     "settings",
     "data"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sydev/electron-data.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sydev/electron-data/issues"
+  },
+  "homepage": "https://github.com/sydev/electron-data",
   "dependencies": {
     "fs-promise": "^2.0.2",
     "user-home": "^2.0.0"
