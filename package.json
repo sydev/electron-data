@@ -1,26 +1,21 @@
 {
   "name": "electron-data",
-  "version": "1.2.2",
+  "version": "2.0.0-beta1",
   "description": "An easy way to save data, settings or anything else as json file in an application folder.",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha --reporter spec"
+    "test": "./node_modules/.bin/jest"
   },
   "author": {
     "email": "dominik@sydev.de",
     "name": "Dominik Winter"
   },
   "license": "MIT",
-  "jshintConfig": {
-    "esnext": true
-  },
   "dependencies": {
-    "mkdirp": "^0.5.1",
-    "require-reload": "^0.2.2",
+    "fs-promise": "^2.0.2",
     "user-home": "^2.0.0"
   },
   "devDependencies": {
-    "chai": "^3.5.0",
-    "mocha": "^3.1.2"
+    "jest": "^19.0.2"
   }
 }

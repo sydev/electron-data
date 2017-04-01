@@ -9,14 +9,14 @@ but also works in any node application.
 ## Table of Contents
 - [Installation](#installation)
 - [Usage](#usage)
--	[API](#api)
+- [API](#api)
 - [Development](#development)
--	[Release Notes](#release-notes)
+- [Release Notes](#release-notes)
 
 ## Installation
 
 ```
-npm install --save electron-data
+$ npm install --save electron-data
 ```
 
 That´s all. You´re done. But wait...You want to use it, too?
