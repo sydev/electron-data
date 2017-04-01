@@ -161,9 +161,9 @@
 
   describe('Save', () => {
 
-    /*afterAll(() => {
+    afterAll(() => {
       return fs.remove(desired_config.path);
-    });*/
+    });
 
     test('Save explicit', () => {
       let desired_json = {
@@ -242,31 +242,19 @@
     });
 
     test('Save with last update info', () => {
-      let desired_json = {
-          "test-string": "test",
-          "test-object": {"test": "test"},
-          "test-array": ["test"],
-          "test-number": 0,
-          "test-true": true,
-          "test-false": false,
-          "test-null": null,
-          "test-autosave": "test",
-          "test-prettysave": "test",
-          "test-lastUpdate": "test",
-          "lastUpdate": new Date(Date.now()).toISOString()
-        };
-
       desired_config.lastUpdate = true;
 
       electron_data.config({lastUpdate: true});
 
       return electron_data.set('test-lastUpdate', 'test')
         .then(data => {
-          data.lastUpdate = desired_json.lastUpdate;
-          expect(data).toMatchObject(desired_json);
+          expect(data).toBeInstanceOf(Object);
 
           return fs.readFile(desired_config.path +'/test.json', 'utf-8')
-            .then(content => expect(JSON.parse(content)).toMatchObject(desired_json));
+            .then(content => {
+              expect(JSON.parse(content)).toHaveProperty('lastUpdate');
+              expect(new Date(JSON.parse(content).lastUpdate)).toBeInstanceOf(Date);
+            });
         })
         .catch(err => expect(err).toBeNull());
     });
