@@ -119,8 +119,8 @@
       let self  = this,
         item    = null;
 
-      self.data = reload(self.filepath);
-
+      if (self.options.autosave) self.data = reload(self.filepath);
+      
       if (!key) return self.data;
 
       for (let p in self.data) {
