@@ -171,7 +171,12 @@
   const __setAll = data => {
     if (!data) return Promise.reject(new Error('data must be given.'));
     self.data = Object.assign({}, self.data, data);
-    return Promise.resolve(self.data);
+
+    if (self.options.autosave) {
+      return save();
+    } else {
+      return Promise.resolve(self.data);
+    }
   };
 
   module.exports = {config, getOptions, has, get, set, unset, clear, save, __getAll, __setAll};
