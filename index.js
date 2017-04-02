@@ -1,8 +1,8 @@
 /**
 * module name:  electron-data
 * author:       Dominik Winter
-* version:      2.0.1
-* release date: 01.04.2017
+* version:      2.1.0
+* release date: 02.04.2017
 */
 
 (() => {
@@ -75,6 +75,52 @@
   };
 
   /**
+   * Get an object containing key => value pairs for given keys. 
+   * If one of the keys isn´t presented in the data object, it will be skipped.
+   * 
+   * @param {Array<String>} keys - An array of keys.
+   * @return {Promise<Object>} The object containing the data.
+   */
+  const getMany = keys => {
+    if (!keys || !Array.isArray(keys)) return Promise.reject(new Error('keys must be an array.'));
+
+    let i       = 0,
+      len       = keys.length,
+      promises  = [],
+      data      = {};
+
+    for (; i < len; i++) promises.push(has(keys[i]));
+
+    return Promise.all(promises)
+      .then(has_keys => {
+        i         = 0;
+        promises  = [];
+
+        for (; i < len; i++) {
+          if (has_keys[i] === true) promises.push(get(keys[i]));
+        }
+
+        return Promise.all(promises)
+          .then(values => {
+            i = 0;
+
+            for (; i < len; i++) data[keys[i]] = values[i];
+
+            return data;
+          });
+      });
+  };
+
+  /**
+   * Resolves the whole data object, even it´s empty.
+   * 
+   * @return {Promise<Object>} The whole data object.
+   */
+  const getAll = () => {
+    return Promise.resolve(self.data);
+  };
+
+  /**
    * Set a key => value pair.
    * 
    * @param {String} key - A String to add to the data object properties.
@@ -99,6 +145,44 @@
       return Promise.reject(e);
     }
   };
+
+  /**
+   * Set many key => value pairs at once.
+   * 
+   * @param {Object} obj - The data to store.
+   * @return {Promise<Object>} The whole data object.
+   */
+  const setMany = obj => {
+
+    try {
+      for (let p in obj) {
+        if (obj[p] === undefined || (typeof obj[p] === 'number' && isNaN(obj[p]))) delete obj[p];
+      }
+
+      self.data = Object.assign({}, self.data, obj);
+
+      if (self.options.autosave) {
+        return save().then(() => self.data);
+      } else {
+        return Promise.resolve(self.data);
+      }
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  };
+
+  /**
+   * Get all keys from the data object.
+   * 
+   * @return {Promise<Array>} An array containing all keys.
+   */
+  const keys = () => {
+    let keys = [];
+
+    for (let p in self.data) keys.push(p);
+
+    return Promise.resolve(keys);
+  }
 
   /**
    * Remove a key => value at given key.
@@ -151,33 +235,5 @@
     return fs.outputFile(self.filepath, JSON.stringify(data, null, pretty), 'utf-8');
   };
 
-  /**
-   * Get the whole data object.
-   * 
-   * @private
-   * @return {Promise<Object>} The whole data object
-   */
-  const __getAll = () => {
-    return Promise.resolve(self.data);
-  };
-
-  /**
-   * Extend/Override the whole data object. 
-   * 
-   * @private
-   * @param {Object} data - An Object to set as data object.
-   * @return {Promise<Object>} The whole data object
-   */
-  const __setAll = data => {
-    if (!data) return Promise.reject(new Error('data must be given.'));
-    self.data = Object.assign({}, self.data, data);
-
-    if (self.options.autosave) {
-      return save();
-    } else {
-      return Promise.resolve(self.data);
-    }
-  };
-
-  module.exports = {config, getOptions, has, get, set, unset, clear, save, __getAll, __setAll};
+  module.exports = {config, getOptions, has, get, getMany, getAll, set, setMany, keys, unset, clear, save};
 })();

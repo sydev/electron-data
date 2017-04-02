@@ -31,6 +31,19 @@
 
   describe('Setters', () => {
 
+    test('Set many', () => {
+      let desired_json = {
+        set: 'many',
+        at: ['once'],
+        no: {problem: 'or?'}
+      };
+
+      return electron_data.setMany(desired_json)
+        .then(data => expect(data).toMatchObject(desired_json))
+        .then(() => electron_data.clear())
+        .catch(err => expect(err).toBeNull());
+    });
+
     test('Set key, value = String', () => {
       return electron_data.set('test-string', 'test')
         .then(data => expect(data).toMatchObject({'test-string': 'test'}))
@@ -130,6 +143,43 @@
         .then(value => expect(value).toEqual(null))
         .catch(err => expect(err).toBeNull());
     });
+
+    test('Get String, Object, Array at once', () => {
+      let desired_json = {
+        'test-string': 'test',
+        'test-object': {'test': 'test'},
+        'test-array': ['test']
+      };
+
+      return electron_data.getMany(['test-string', 'test-object', 'test-array'])
+        .then(data => expect(data).toMatchObject(desired_json))
+        .catch(err => expect(err).toBeNull());
+    });
+
+    test('Get all at once', () => {
+      let desired_json = {
+        'test-string': 'test',
+        'test-object': {'test': 'test'},
+        'test-array': ['test'],
+        'test-number': 0,
+        'test-true': true,
+        'test-false': false,
+        'test-null': null
+      };
+
+      return electron_data.getAll()
+        .then(data => expect(data).toMatchObject(desired_json))
+        .catch(err => expect(err).toBeNull());
+    });
+
+    test('Get keys', () => {
+      let desired_arr = ['test-string', 'test-object', 'test-array', 'test-number', 'test-true', 'test-false', 'test-null'];
+
+      return electron_data.keys()
+        .then(keys => expect(keys).toMatchObject(desired_arr))
+        .catch(err => expect(err).toBeNull());
+    });
+
   });
 
   describe('Unset and clear', () => {
@@ -137,12 +187,12 @@
     let saved = null;
 
     beforeAll(() => {
-      return electron_data.__getAll()
+      return electron_data.getAll()
         .then(data => saved = Object.assign({}, data));
     });
 
     afterAll(() => {
-      return electron_data.__setAll(saved);
+      return electron_data.setMany(saved);
     });
 
     test('unset', () => {
