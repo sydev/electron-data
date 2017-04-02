@@ -49,7 +49,6 @@ Without any configuration, the file will be automatically created in your home d
 ### Methods
 
 ##### ```electron_data.config(options)```
-Returns a new electron_data instance.
 - ```options``` Object (required)
     - ```filename``` String - Name for the file that will be stored and used. Default is ```data```
     - ```path``` String - **When using [Electron](https://github.com/atom/electron), use ```app.getPath('userData')``` as value.** Absolute path to your application directory. Will be created if not already exists. Default is ```home-dir-of-os/.electron-app/```
@@ -63,12 +62,25 @@ Resolves the options as object.
 
 ##### ```electron_data.has(key)```
 Checks if the data file has a property named ```key```. Resolves boolean.
-- ```key``` String - Property name
+- ```key``` String (required) - Key name
+
+
+##### ```electron_data.keys()```
+Resolves an array of all presented keys in the data object.
 
 
 ##### ```electron_data.get(key)```
-If key is given and the data file has an property named ```key```, resolves the value of given ```key```.
-- ```key``` String (optional) - Property name
+If the data file has an property named ```key```, resolves the value of given ```key```.
+- ```key``` String (required) - Key name
+
+
+##### ```electron_data.getMany(keys)```
+Resolves an object containing given keys and their values. If one or more keys aren´t presented at the data object, they will be skipped.
+- ```keys``` Array (required) - Array of key names.
+
+
+##### ```electron_data.getAll()```
+Resolves the whole data object, even if it´s empty.
 
 
 ##### ```electron_data.set(key, value)```
@@ -77,9 +89,14 @@ Sets the given ```value``` to the given ```key``` in the data file. If one of bo
 - ```value``` ? - Property value. Can be any JSON conform data.
 
 
+##### ```electron_data.setMany(object)```
+Sets all key => value pairs from given object to the data object. Overrides previous values with the same key.
+- ```object``` Object (required) - A valid JSON object.
+
+
 ##### ```electron_data.unset(key)```
 Deletes the key => value pair @```key```.
-- ```key``` String - Property name
+- ```key``` String - Key name
 
 
 ##### ```electron_data.clear()```
@@ -178,6 +195,11 @@ npm test
 
 
 ## Release Notes
+- ```2.1.0```
+  - Add new methods (getMany, getAll, setMany, keys). For more informations, read the [API-Section](#api)
+  - Some bugfixes
+- ```2.0.1```
+  - Some bugfixes
 - ```2.0.0```
   - Promisify all methods
   - Not using the object-oriented notation anymore. For more informations have a look [@Usage](#usage)
