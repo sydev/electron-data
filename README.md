@@ -1,3 +1,5 @@
+[![NPM](https://nodei.co/npm/electron-data.png?downloads=true&downloadRank=true)](https://nodei.co/npm/electron-data/)
+
 # electron-data
 
 [![Build Status](https://travis-ci.org/sydev/electron-data.svg?branch=v2.x)](https://travis-ci.org/sydev/electron-data)
