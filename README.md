@@ -34,15 +34,6 @@ That´s all. You´re done. But wait...You want to use it, too?
 
 ## Usage
 
-With Electron:
-```JavaScript
-const app           = require('electron').app;
-const electron_data = require('electron-data');
-
-electron_data.config({/* Your config */});
-```
-
-Without Electron:
 ```JavaScript
 const electron_data = require('electron-data');
 
