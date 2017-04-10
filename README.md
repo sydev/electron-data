@@ -3,6 +3,11 @@
 # electron-data
 
 [![Build Status](https://travis-ci.org/sydev/electron-data.svg?branch=v2.x)](https://travis-ci.org/sydev/electron-data)
+[![Monthly Downloads](https://img.shields.io/npm/dm/electron-data.svg)](https://npmjs.com/package-electron-data)
+[![Total Downloads](https://img.shields.io/npm/dt/electron-data.svg)](https://npmjs.com/package-electron-data)
+[![npm version](https://img.shields.io/npm/v/electron-data.svg)](https://npmjs.com/package-electron-data)
+[![Dependencies](https://img.shields.io/david/sydev/electron-data.svg)](https://npmjs.com/package-electron-data)
+[![devDependencies](https://img.shields.io/david/dev/sydev/electron-data.svg)](https://npmjs.com/package-electron-data)
 
 An easy way to save data, settings or anything else as JSON file in an
 application folder, using a simple localStorage-like API, but promisified.
