@@ -89,13 +89,13 @@
     test('Set key, value = NaN, should throw an error', () => {
       return electron_data.set('test-nan', NaN)
         .then(data => expect(data).toBeNull())
-        .catch(err => expect(err).toThrow());
+        .catch(err => expect(() => { throw err; }).toThrow());
     });
 
     test('Set key, value = undefined, should throw an error', () => {
       return electron_data.set('test-undefined', undefined)
         .then(data => expect(data).toBeNull())
-        .catch(err => expect(err).toThrow());
+        .catch(err => expect(() => { throw err; }).toThrow());
     })
 
   });
