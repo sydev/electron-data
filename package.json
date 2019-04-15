@@ -1,6 +1,6 @@
 {
   "name": "electron-data",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "An easy way to save data, settings or anything else as json file in an application folder.",
   "main": "index.js",
   "scripts": {

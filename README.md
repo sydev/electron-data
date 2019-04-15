@@ -193,6 +193,10 @@ npm test
 
 
 ## Release Notes
+- ```2.1.1```
+  - Switch to fs-extra, because fs-promise is deprecated
+  - Upgrade dependencies
+  - Update tests
 - ```2.1.0```
   - Add new methods (getMany, getAll, setMany, keys). For more informations, read the [API-Section](#api)
   - Some bugfixes
