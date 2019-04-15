@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/sydev/electron-data",
   "dependencies": {
-    "fs-promise": "^2.0.2",
+    "fs-extra": "^7.0.1",
     "user-home": "^2.0.0"
   },
   "devDependencies": {

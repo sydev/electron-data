@@ -8,7 +8,7 @@
 (() => {
   'use strict';
 
-  const fs    = require('fs-promise');
+  const fs    = require('fs-extra');
   const home  = require('user-home');
   const path  = require('path');
 
