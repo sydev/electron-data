@@ -1,8 +1,8 @@
 /**
 * module name:  electron-data
 * author:       Dominik Winter
-* version:      2.1.1
-* release date: 15.04.2019
+* version:      2.1.2
+* release date: 14.03.2020
 */
 
 (() => {

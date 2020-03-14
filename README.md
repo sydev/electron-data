@@ -193,6 +193,13 @@ npm test
 
 
 ## Release Notes
+- ```2.1.2```
+  - Security Update
+    - Update [acorn](https://www.npmjs.com/package/acorn) to `^7.1.1`
+    - Update [lodash](https://www.npmjs.com/package/lodash) to `^4.17.12`
+    - Update [mixin-deep](https://www.npmjs.com/package/mixin-deep) to `^1.3.2`
+    - Update [set-value](https://www.npmjs.com/package/set-value) to `^2.0.1`
+    - Update [sshpk](https://www.npmjs.com/package/sshpk) to `^1.13.2`
 - ```2.1.1```
   - Switch to fs-extra, because fs-promise is deprecated
   - Upgrade dependencies
